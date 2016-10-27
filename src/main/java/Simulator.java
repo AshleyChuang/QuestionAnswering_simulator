@@ -30,12 +30,12 @@ public class Simulator {
 	List<Question> list_of_question;
 	int algorithm = 0; // 0:bottlenect, 1:iASK, 2:SOS
 	int random_seed = 0;
-	double alpha = 1.0; // {0.6, 0.8, 1}
-	int no_path_solution = 0;
-	int num_question = 0;
+	double predictability = 1.0; // {0.6, 0.8, 1}
 	int num_of_answerers = 4; // {1, 2, 4, 6, 8}
-    float user_asking_rate = 1/4; // {1/10, 1/8, 1/4, 1/2, 1}
+    double user_asking_rate = 1/4; // {1/10, 1/8, 1/4, 1/2, 1}
     int num_of_expertises = 4; // {2, 4, 8, 16}
+    long simulator_last = 3600*24*1; // 7 days
+    
     
 	public Simulator() {
 		list_of_question = new ArrayList<Question>();
@@ -47,19 +47,34 @@ public class Simulator {
 		}
 		events = new TreeMap<Long, ArrayList<Event>>();
 	}
+	public void setAskingRate(int index) { /// 0 ~ 4
+		double[] rates = {1.0/10.0, 1.0/6.0, 1.0/4.0, 1.0/2.0, 1.0};
+		user_asking_rate = rates[index];
+		this.PoissonArrivalRate = (long) ((long) 3600 * (1.0/user_asking_rate));
+		System.out.println(1.0/user_asking_rate);
+		System.out.println(this.PoissonArrivalRate);
+	}
 	public void run() {
 		Iterator<Long> it = events.keySet().iterator();
-		
+		boolean timesup = false;
 		while(it.hasNext()) {
 			long key = it.next();
 			curTime = key;
 			ArrayList<Event> list_of_events = events.get(key);
 			Iterator<Event> it_events = list_of_events.iterator();
-			
+			//System.out.println("length of events at the same time: " + list_of_events.size());
 			while(it_events.hasNext()) {
 				Event event = it_events.next();
 				event.exec();
+				System.out.println("time: " + event.time);
+				if(event.time > this.simulator_last) {
+					timesup = true;
+					//break;
+				}
 				it_events.remove();
+			}
+			if(timesup) {
+				//break;
 			}
 			events.remove(key);
 			it = events.keySet().iterator();
@@ -74,18 +89,18 @@ public class Simulator {
 		}
 		events.get(event.time).add(event);
 	}
-	public void generateQuestions(int num) {
-		this.num_question = num;
-		for(int i=1; i<=num; i++) {
-			Question q = questionGenerator.generate(i, wholeGraph.size(), random_seed+1);
-			QuestionEvent question_event = new QuestionEvent(q, q.timeInterval.startingTime*3600);
-			if(events.get(question_event.time) == null) {
-				events.put(question_event.time, new ArrayList<Event>());
-			}
-			events.get(question_event.time).add(question_event);
-			list_of_question.add(q);
-		}
-	}
+//	public void generateQuestions(int num) {
+//		this.num_question = num;
+//		for(int i=1; i<=num; i++) {
+//			Question q = questionGenerator.generate(i, wholeGraph.size(), random_seed+1);
+//			QuestionEvent question_event = new QuestionEvent(q, q.timeInterval.startingTime*3600);
+//			if(events.get(question_event.time) == null) {
+//				events.put(question_event.time, new ArrayList<Event>());
+//			}
+//			events.get(question_event.time).add(question_event);
+//			list_of_question.add(q);
+//		}
+//	}
 	public void printQuestionInfo() {
 		Iterator<Question> it = list_of_question.iterator();
 		
@@ -94,6 +109,37 @@ public class Simulator {
 			q.solved();
 		}
 		this.question_info.close();
+	}
+	public void usersAskQuestion() {
+		Iterator it = wholeGraph.entrySet().iterator();
+		int questionId = 0;
+		while (it.hasNext()) {
+			Map.Entry pair = (Map.Entry) it.next();
+			Node asker = (Node) pair.getValue();
+			//System.out.println("--------------------------------");
+			//System.out.println("ASKER: " + asker.userId);
+			long simulator_time = 0L;
+			do {
+				long nextTime = this.poissonNextTime((1.0/(double)Simulator.PoissonArrivalRate));
+				long happeningTime = simulator_time + nextTime;
+				//System.out.println("current Time: " + simulator_time);
+				//System.out.println("nexttime: " + nextTime);
+				Question q = questionGenerator.generate(Integer.parseInt(asker.userIndex), questionId, wholeGraph.size(), (int)happeningTime/3600);
+				QuestionEvent q_event = new QuestionEvent(q, simulator_time+nextTime);
+				if(events.get(q_event.time) == null) {
+					events.put(q_event.time, new ArrayList<Event>());
+				}
+				events.get(q_event.time).add(q_event);
+				list_of_question.add(q);
+				simulator_time = happeningTime;
+				questionId ++;
+			}while(simulator_time <= this.simulator_last);
+		}
+	}
+	public long poissonNextTime(double L) {
+		double rand = Math.random();
+		//System.out.println((-Math.log(1-rand)/L));  
+		return (long) (-Math.log(1.0-rand)/L);
 	}
 	public void printUserInfo() {
 		Iterator it = wholeGraph.entrySet().iterator();
@@ -130,7 +176,7 @@ public class Simulator {
 		        	}
 		        	Long a_t = Long.parseLong(str[i]);
 		        	double rand = Math.random();
-		        	if(rand<=alpha) {
+		        	if(rand<=predictability) {
 		        		n.activeTime.add(a_t);
 		        	}
 		        	k++;
@@ -167,9 +213,9 @@ public class Simulator {
 		try {
 			StringBuilder file_name = new StringBuilder();
 			
-			if(this.algorithm == 0) file_name.append("Bottleneck/").append("Bottleneck_").append(this.num_question).append("_").append(this.random_seed).append("_").append(this.alpha);
-			else if(this.algorithm == 1) file_name.append("iASK/").append("iASK_").append(this.num_question).append("_").append(this.random_seed).append("_").append(this.alpha);
-			else if(this.algorithm == 2) file_name.append("SOS/").append("SOS_").append(this.num_question).append("_").append(this.random_seed).append("_").append(this.alpha);
+			if(this.algorithm == 0) file_name.append("Bottleneck/").append("Bottleneck_").append(this.PoissonArrivalRate).append("_").append(this.random_seed).append("_").append(this.predictability).append("_").append(this.num_of_expertises);
+			else if(this.algorithm == 1) file_name.append("iASK/").append("iASK_").append(this.PoissonArrivalRate).append("_").append(this.random_seed).append("_").append(this.predictability).append("_").append(this.num_of_expertises);
+			else if(this.algorithm == 2) file_name.append("SOS/").append("SOS_").append(this.PoissonArrivalRate).append("_").append(this.random_seed).append("_").append(this.predictability).append("_").append(this.num_of_expertises);
 		
 			output = new PrintWriter("results/log/" + file_name.toString() + "_log.txt");
 			question_info = new PrintWriter("results/questions/" + file_name.toString() + "_question_info.txt");

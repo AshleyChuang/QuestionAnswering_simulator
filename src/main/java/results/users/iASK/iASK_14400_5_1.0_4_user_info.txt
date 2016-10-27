@@ -1,0 +1,62 @@
+Ruan Yushan,20,23,3.0, 1.0,56
+Liao Xun weight,0,399,0.0, 4.0,24
+Martha Fu,0,0,4.0, 0.0,20
+Li Yuzhe,0,0,4.0, 0.0,20
+Chang Chun Peng,60,0,4.0, 0.0,96
+Liu Yi Ning,0,0,4.0, 0.0,32
+Qiu Italian View,0,0,4.0, 0.0,24
+Xiang Yang Min,0,0,4.0, 0.0,36
+Su Yang Xi,0,0,4.0, 0.0,24
+Liuling Jun,0,0,0.0, 4.0,12
+Andy Chung,28,0,4.0, 0.0,52
+Yushi Yeap,24,0,4.0, 0.0,40
+Zhang Liangwei,0,0,4.0, 0.0,20
+Zou Yun Yun,445,403,1.0, 2.9096774193548387,453
+Zhong Xuan can,112,0,4.0, 0.0,128
+Yang Zhuoyun,0,0,4.0, 0.0,24
+Jason Lin,0,0,4.0, 0.0,44
+Deng Yizhen,46,0,1.4, 1.6666666666666667,78
+Lin Zhen,84,0,4.0, 0.0,112
+Huang Zhijun,0,0,4.0, 0.0,24
+Winnie Chang,96,0,4.0, 0.0,124
+Stephanie Kao,0,0,4.0, 0.0,32
+Chenjia Ru,63,0,1.0, 1.8611111111111112,79
+Harry Chen,0,0,4.0, 0.0,24
+Jimmy Yuan,592,0,3.0, 1.0,620
+Chen Weijun,80,0,2.0, 2.0,108
+Lin Chunan,0,0,4.0, 0.0,28
+Huang Han,0,0,4.0, 0.0,32
+Carisa Hung,0,0,4.0, 0.0,40
+Yu Chen Chen,0,0,0.0, 0.0,0
+Liu Ting Yi,0,0,4.0, 0.0,24
+Yang Junwei,0,0,4.0, 0.0,60
+Lin Wan Xuan,0,0,1.0, 3.0,40
+High Ze Quan,10,0,1.0, 1.8235294117647058,38
+Liu Fengxuan,99,0,0.0, 1.3370786516853932,119
+Zhang Yan Yu,224,0,4.0, 0.0,248
+Kang Mingxi,0,0,2.0, 2.0,8
+Huang Tingbai,0,0,0.0, 4.0,28
+Hung Yu Heng,0,0,4.0, 0.0,28
+Bai Li Jian,0,0,4.0, 0.0,40
+Chen Yi Ling,19,396,1.0, 1.6428571428571428,55
+Alex Chiang,0,0,4.0, 0.0,28
+Huang Zhenting,0,0,4.0, 0.0,40
+Song Pei Hoon,93,0,1.1842105263157894, 2.0,121
+Yang Hyun Christine,0,0,0.0, 4.0,12
+Zhong Jiajun,0,0,4.0, 0.0,32
+Lizi Xuan,42,0,0.0, 3.0,54
+Peng Wei Wang,0,0,4.0, 0.0,32
+Yun Yun Tsai,0,0,1.0, 3.0,24
+Guo Baiyu,0,0,4.0, 0.0,28
+He Yuting,0,0,0.0, 0.0,0
+Wong Yang,0,0,4.0, 0.0,12
+Wu Chenxi,0,0,4.0, 0.0,28
+Guan Ai Wu,0,0,4.0, 0.0,20
+Wen Shi Kai,104,0,4.0, 0.0,128
+Lin Zonghan,9,0,1.0, 2.0,45
+Li Jingying,0,0,4.0, 0.0,28
+Fuzi Rui,134,399,1.0, 1.1603053435114503,158
+Howard Hsu,0,0,4.0, 0.0,36
+Zhang Qi,0,0,4.0, 0.0,28
+Weng Zaihao,107,0,1.0, 1.9393939393939394,135
+Liven Pan,18,0,2.0, 2.0,46

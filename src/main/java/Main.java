@@ -28,11 +28,12 @@ public class Main {
 			//System.out.println(args[i]);
 		}
 		Simulator.simulator.setAlgorithm(Integer.parseInt(args[0]));
+		Simulator.simulator.setAskingRate(Integer.parseInt(args[1]));
 		Simulator.simulator.random_seed = Integer.parseInt(args[2]);
-		Simulator.simulator.alpha = Double.parseDouble(args[3]);
-		Simulator.simulator.num_of_answerers = Integer.parseInt(args[4]);
+		Simulator.simulator.predictability = Double.parseDouble(args[3]);
+		Simulator.simulator.num_of_expertises = Integer.parseInt(args[4]);
 		Simulator.simulator.getWholeGraph();
-		Simulator.simulator.generateQuestions(Integer.parseInt(args[1]));
+		Simulator.simulator.usersAskQuestion();
 		Simulator.simulator.createOutputFiles();
 		Simulator.simulator.run();
 	}

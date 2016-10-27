@@ -12,7 +12,7 @@ public class QuestionGenerator{
 		keywords = new ArrayList<String>();
 		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader("keywords.txt"));
+			br = new BufferedReader(new FileReader("dataset/keywords.txt"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -29,14 +29,14 @@ public class QuestionGenerator{
 		}
 	}
 	
-	public Question generate(Integer questionId, int size, int starting_time) {
+	public Question generate(Integer askerId, Integer questionId, int size, int starting_time) {
 		Question q = null;
-		long seed = Simulator.simulator.random_seed;
+		long seed = Simulator.simulator.random_seed+questionId;
 		Random random = new Random();
 		random.setSeed(seed);
-		int num_of_keywords = (int) (random.nextInt(100)+1);
+		int num_of_keywords = Simulator.simulator.num_of_expertises;
 		
-		int source_index = (int) random.nextInt(size);
+		int source_index = askerId;
 		int num_of_answerers = Simulator.simulator.num_of_answerers;
 		int start_time = starting_time%24;
 		int end_time = (int) random.nextInt(24)+1;

@@ -19,6 +19,7 @@ public class RelayEvent extends Event{
 	}
 	
 	public void exec() {
+		//System.out.println(q.questionId + " relaynode "  + relay_node.userId + " : " + Long.toString(time));
 		Simulator.simulator.output.println(q.questionId + " passer " + relay_node.userId + " : " + Long.toString(time));
 		super.exec();
 	}

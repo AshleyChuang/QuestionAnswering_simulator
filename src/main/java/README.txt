@@ -3,10 +3,10 @@ run simulator:
 >> java Main arg1 arg2 arg3 arg4 arg5
 
 ** arg1: which algorithm to use (0:Bottleneck, 1:iASK, 2: SOS)
-** arg2: # of questions 
+** arg2: arrival rate following a Poisson process (0~4: default->2)
 ** arg3: the seed for generate questions randomly
-** arg4: active time
-** arg5: the number of answerers
+** arg4: predictability(a real from 0 to 1)
+** arg5: the number of expertises per question
 
 output files:
 

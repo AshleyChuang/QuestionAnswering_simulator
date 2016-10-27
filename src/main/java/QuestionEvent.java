@@ -35,9 +35,12 @@ public class QuestionEvent extends Event {
 		String question_content = question.content;
 		String starting_time = question.timeInterval.startingTime.toString();
 		String ending_time = question.timeInterval.endingTime.toString();
-		String bottleneck_tree = "python /Users/ashley/documents/NMSL/mcloud/doc_infocom17/Scripts/Bottleneck_Tree_Final.py";
-		String iASK = "python /Users/ashley/documents/NMSL/mcloud/doc_infocom17/Scripts/iASK_Final.py";
-		String SOS = "python /Users/ashley/documents/NMSL/mcloud/doc_infocom17/Scripts/SOS_Final.py";
+//		String bottleneck_tree = "python /Users/ashley/documents/NMSL/mcloud/doc_infocom17/Scripts/Bottleneck_Tree_Final.py";
+//		String iASK = "python /Users/ashley/documents/NMSL/mcloud/doc_infocom17/Scripts/iASK_Final.py";
+//		String SOS = "python /Users/ashley/documents/NMSL/mcloud/doc_infocom17/Scripts/SOS_Final.py";
+		String bottleneck_tree = "python /Users/ashley/documents/NMSL/mcloud/simulator_ashley/nmsl/src/main/java/algorithms/Bottleneck_Tree_Final.py";
+		String iASK = "python /Users/ashley/documents/NMSL/mcloud/simulator_ashley/nmsl/src/main/java/algorithms/iASK_Final.py";
+		String SOS = "python /Users/ashley/documents/NMSL/mcloud/simulator_ashley/nmsl/src/main/java/algorithms/SOS_Final.py";
 		String algo = null;
 		
 		if(Simulator.simulator.algorithm == 0) {
@@ -57,7 +60,6 @@ public class QuestionEvent extends Event {
 				+ " " + starting_time
 				+ " " + ending_time;
 		
-		//System.out.println("command: " + myCommand);
 		String[] cmd = {
 				"/bin/bash",
 				"-c",
@@ -88,11 +90,13 @@ public class QuestionEvent extends Event {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		asker.getQuestionTime = time;
-		asker.getQuestionPeriod = 0L;
-		Simulator.simulator.output.println("Asker " + asker.userId + " : " + asker.getQuestionTime);
-		deliverQuestion();
+		if(!this.question.noSolution) {
+			//System.out.println("running question " + question.questionId);
+			asker.getQuestionTime = time;
+			asker.getQuestionPeriod = 0L;
+			Simulator.simulator.output.println("Asker " + asker.userId + " : " + asker.getQuestionTime);
+			deliverQuestion();
+		}
 		super.exec();
 	}
 	
@@ -123,6 +127,7 @@ public class QuestionEvent extends Event {
 					if(n.edge_delay.containsKey(m.userId)) {
 						basic_edge_delay = n.edge_delay.get(m.userId);
 					}
+					//System.out.println("create relay");
 					RelayEvent e = new RelayEvent(question, m, n.getQuestionTime+edge_delay*60*60+basic_edge_delay, basic_edge_delay+edge_delay*60*60+n.getQuestionPeriod);
 					long days = n.getQuestionTime%(24*60*60);
 					if(n.pass_each_day.containsKey(days)) {
@@ -157,6 +162,7 @@ public class QuestionEvent extends Event {
 					if(n.edge_delay.containsKey(m.userId)) {
 						basic_edge_delay = n.edge_delay.get(m.userId);
 					}
+					//System.out.println("create answer");
 					AnswerEvent e = new AnswerEvent(question, m, n.getQuestionTime+edge_delay*60*60+basic_edge_delay, basic_edge_delay+edge_delay*60*60+n.getQuestionPeriod);
 					long days = n.getQuestionTime%(24*60*60);
 					if(n.answer_each_day.containsKey(days)) {
@@ -188,8 +194,8 @@ public class QuestionEvent extends Event {
 			int begin = line.indexOf('[') + 1;
 			int end = line.indexOf(']');
 			if(begin==0 && end==-1) {
-				Simulator.simulator.no_path_solution ++;
-                System.out.println("NO PATH");
+				this.question.no_path_solution ++;
+                //System.out.println("NO PATH");
 				continue;
 			}
 			String path = line.substring(begin, end);
@@ -204,9 +210,9 @@ public class QuestionEvent extends Event {
 			}
 			all_paths.add((ArrayList<Node>) nodes_in_a_path);
 		}
-        if(Simulator.simulator.no_path_solution == output.size()){
-            System.out.println("no solution at all");
-            System.exit(1);
+        if(this.question.no_path_solution == output.size()){
+            //System.out.println("no solution at all");
+            this.question.noSolution = true;
         }
     }
 

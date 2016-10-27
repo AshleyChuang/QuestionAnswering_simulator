@@ -12,12 +12,13 @@ public class AnswerEvent extends Event{
 		this.period = pd;
 		target_node.times_answer += 1;
 		this.target = target_node;
+		q.spentTime.add(period + target.answeringTime);
 	}
 	
 	public void exec() {
-		//System.out.println(q.questionId + " answerer "  + target.userId + " : " + Long.toString(period + target.answeringTime));
+		//System.out.println(q.questionId + " answerer "  + target.userId + " : " + Long.toString(time + target.answeringTime));
 		Simulator.simulator.output.println(q.questionId + " answerer "  + target.userId + " : " + Long.toString(time+ target.answeringTime));
-		q.spentTime.add(period + target.answeringTime);
+		//q.spentTime.add(period + target.answeringTime);
 		super.exec();
 	}
 }
